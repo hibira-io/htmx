@@ -1,0 +1,53 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ["20", "22", "24"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+      - name: Package contents
+        run: npm pack --dry-run
+
+  # The extension against a real Pusher-compatible server, in Chromium.
+  e2e:
+    runs-on: ubuntu-latest
+    services:
+      soketi:
+        image: quay.io/soketi/soketi:1.6-16-debian
+        ports: ["6001:6001"]
+        env:
+          SOKETI_DEFAULT_APP_ID: app-id
+          SOKETI_DEFAULT_APP_KEY: app-key
+          SOKETI_DEFAULT_APP_SECRET: app-secret
+    env:
+      HIBIRA_E2E_HOST: 127.0.0.1
+      HIBIRA_E2E_PORT: "6001"
+      HIBIRA_E2E_TLS: "0"
+      HIBIRA_E2E_APP_ID: app-id
+      HIBIRA_E2E_KEY: app-key
+      HIBIRA_E2E_SECRET: app-secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npm install --no-save playwright@1
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
