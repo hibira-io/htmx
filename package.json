@@ -1,0 +1,84 @@
+{
+  "name": "@hibira-io/htmx",
+  "version": "0.1.0",
+  "description": "htmx extension hx-ext=\"hibira\": swap server-rendered HTML into the page live over Hibira or any Pusher-compatible channel, from any backend. Works with htmx 2 and htmx 4",
+  "keywords": [
+    "htmx",
+    "htmx-extension",
+    "hypermedia",
+    "websocket",
+    "realtime",
+    "live",
+    "html-over-the-wire",
+    "pusher",
+    "pusher-js",
+    "laravel",
+    "django",
+    "flask",
+    "rails",
+    "go",
+    "hibira"
+  ],
+  "homepage": "https://hibira.io",
+  "bugs": {
+    "url": "https://github.com/hibira-io/htmx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hibira-io/htmx.git"
+  },
+  "license": "MIT",
+  "author": "Hibira (https://hibira.io)",
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "unpkg": "dist/hibira.min.js",
+  "jsdelivr": "dist/hibira.min.js",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./hibira.js": "./dist/hibira.js",
+    "./hibira.min.js": "./dist/hibira.min.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "dist/hibira.js",
+    "dist/hibira.min.js",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "pretest": "npm run build",
+    "test": "node --test test/*.test.mjs",
+    "test:e2e": "npm run build && node --test test/e2e/*.e2e.mjs",
+    "typecheck": "tsc -p test/tsconfig.json",
+    "prepack": "npm run build"
+  },
+  "peerDependencies": {
+    "htmx.org": "^2.0.0 || ^4.0.0",
+    "pusher-js": ">=7"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "htmx.org": "^2.0.11",
+    "htmx4": "npm:htmx.org@^4.0.0",
+    "jsdom": "^27.4.0",
+    "pusher": "^5.3.4",
+    "pusher-js": "^8.6.0",
+    "typescript": "^5.9.3"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}
