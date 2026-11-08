@@ -172,6 +172,23 @@ Already using Laravel Echo with the Pusher driver? Leave out
 `hibira-connect`: the extension uses `window.Echo`'s connection, so the page
 keeps one socket.
 
+## Encrypted channels
+
+On `private-encrypted-` channels your server encrypts each event and only
+subscribers can read it; Hibira relays ciphertext it cannot decrypt. Load the
+pusher-js build that includes encryption instead of the plain one:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/pusher-js@8.6.0/dist/web/pusher-with-encryption.min.js"></script>
+```
+
+With a bundler, `import Pusher from 'pusher-js/with-encryption'` and pass it to
+`register(htmx, { Pusher })`. On the server, set an encryption master key
+(32 bytes, `openssl rand -base64 32`) in your Pusher library, for example
+`encryption_master_key_base64` in Laravel's `pusher` connection options. It
+then encrypts what you trigger on these channels and returns the channel's key
+from your auth endpoint. Swaps work as on any other channel.
+
 ## Server examples
 
 The app ID and key are on the app's page in the Hibira portal. The secret
